@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshCheck AI - Enterprise Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="ri-leaf-fill"></i> FreshCheck<span class="highlight">AI</span>
+            </div>
+            <p>Enterprise Produce Quality Control & Analytics</p>
+        </header>
+
+        <div class="main-card">
+            <!-- TABS -->
+            <div class="tabs">
+                <button class="tab-btn active" id="tab-upload">
+                    <i class="ri-upload-cloud-line"></i> Batch Upload
+                </button>
+                <button class="tab-btn" id="tab-camera">
+                    <i class="ri-camera-lens-line"></i> Live Scanner
+                </button>
+            </div>
+
+            <!-- UPLOAD MODE -->
+            <div id="mode-upload" class="mode-section">
+                <div id="drop-zone" class="drop-zone">
+                    <i class="ri-file-upload-line upload-icon"></i>
+                    <h3>Drop produce image(s) here</h3>
+                    <p>or click to browse (Multi-angle & Batch supported)</p>
+                    <input type="file" id="file-input" accept="image/*" multiple hidden>
+                </div>
+                
+                <div id="preview-section" class="preview-section hidden">
+                    <img id="image-preview" src="" alt="Preview">
+                    <div class="btn-group">
+                        <button id="analyze-btn" class="primary-btn">
+                            <i class="ri-ai-generate"></i> Run AI Analysis
+                        </button>
+                        <button id="reset-btn" class="secondary-btn">
+                            <i class="ri-refresh-line"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAMERA MODE -->
+            <div id="mode-camera" class="mode-section hidden">
+                <div class="camera-container">
+                    <video id="webcam" autoplay playsinline muted></video>
+                    <canvas id="canvas" hidden></canvas>
+                    <div class="camera-overlay"></div>
+                </div>
+                <div class="btn-group">
+                    <button id="capture-btn" class="primary-btn">
+                        <i class="ri-focus-3-line"></i> Scan Produce
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="loader" class="loader-container hidden">
+            <div class="spinner"></div>
+            <p>Neural Network Inference in Progress...</p>
+        </div>
+
+        <!-- NEW ANALYTICS DASHBOARD -->
+        <div id="result-card" class="result-card hidden">
+            <div class="result-header">
+                <h2>Quality Control Report</h2>
+                <button class="export-btn" onclick="window.print()"><i class="ri-printer-line"></i> Export</button>
+            </div>
+            
+            <div class="dashboard-grid">
+                <!-- AI Vision Results -->
+                <div class="dash-panel vision-panel">
+                    <h3><i class="ri-eye-line"></i> Vision Analysis</h3>
+                    <div style="display:flex; gap:1.5rem; align-items:center;">
+                        <div style="flex:1;">
+                            <div class="result-item">
+                                <span class="label">Classification</span>
+                                <span id="res-fruit" class="value fruit-val">---</span>
+                                <div class="confidence-bar-bg"><div id="fruit-conf-bar" class="confidence-bar-fill"></div></div>
+                                <span id="fruit-conf-text" class="conf-text">0%</span>
+                            </div>
+                            <div class="result-item" style="margin-top:1rem;">
+                                <span class="label">Quality Status</span>
+                                <span id="res-condition" class="value">---</span>
+                                <div class="confidence-bar-bg"><div id="cond-conf-bar" class="confidence-bar-fill"></div></div>
+                                <span id="cond-conf-text" class="conf-text">0%</span>
+                            </div>
+                        </div>
+                        <div style="flex:0.8; text-align:center;">
+                            <img id="heatmap-img" src="" style="width:100%; border-radius:12px; display:none; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                            <div id="heatmap-label" style="font-size:0.75rem; color:var(--primary); margin-top:5px; display:none; font-weight:600;"><i class="ri-radar-line"></i> AI Attention Map</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agricultural Analytics -->
+                <div class="dash-panel analytics-panel">
+                    <h3><i class="ri-line-chart-line"></i> Market & Storage Analytics</h3>
+                    
+                    <div class="info-row">
+                        <div class="info-icon"><i class="ri-time-line"></i></div>
+                        <div class="info-text">
+                            <span class="info-label">Estimated Shelf Life</span>
+                            <span id="analytics-life" class="info-value">---</span>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon"><i class="ri-temp-cold-line"></i></div>
+                        <div class="info-text">
+                            <span class="info-label">Optimal Storage</span>
+                            <span id="analytics-storage" class="info-value">---</span>
+                        </div>
+                    </div>
+
+                    <div class="info-row">
+                        <div class="info-icon"><i class="ri-store-2-line"></i></div>
+                        <div class="info-text">
+                            <span class="info-label">Action Required</span>
+                            <span id="analytics-action" class="info-value">---</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="new-scan-btn" class="primary-btn full-width" style="margin-top:2rem;">
+                <i class="ri-scan-2-line"></i> New Scan
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

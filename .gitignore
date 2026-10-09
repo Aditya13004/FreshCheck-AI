@@ -1,0 +1,16 @@
+# Virtual Environment
+venv/
+
+# Datasets (too large for GitHub)
+dataset/
+new_dataset/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Old/unused files
+extracted_code.py
+extract_notebook.py
+app.py
+fruit_classifier_final.keras
