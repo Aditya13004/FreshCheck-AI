@@ -21,18 +21,13 @@ app.add_middleware(
 print("Loading Deep Learning Model...")
 model = keras.models.load_model("best_model.keras")
 
-# Dynamically build classes from dataset
-fruit_set = set()
-if os.path.exists("dataset/train"):
-    for root, dirs, files in os.walk("dataset/train"):
-        folder = os.path.basename(root).lower()
-        if folder.startswith('fresh'):
-            fruit_set.add(folder.replace('fresh', ''))
-        elif folder.startswith('rotten'):
-            fruit_set.add(folder.replace('rotten', ''))
-            
-fruit_to_idx = {fruit: idx for idx, fruit in enumerate(sorted(list(fruit_set)))}
-idx_to_fruit = {str(v): k for k, v in fruit_to_idx.items()}
+# Hardcoded classes so the cloud server doesn't need the massive dataset folder
+idx_to_fruit = {
+    '0': 'apple', '1': 'apples', '2': 'banana', '3': 'bellpepper', 
+    '4': 'carrot', '5': 'cucumber', '6': 'grape', '7': 'guava', 
+    '8': 'jujube', '9': 'mango', '10': 'orange', '11': 'oranges', 
+    '12': 'pomegranate', '13': 'potato', '14': 'strawberry', '15': 'tomato'
+}
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
