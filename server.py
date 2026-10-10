@@ -21,13 +21,19 @@ app.add_middleware(
 print("Loading Deep Learning Model...")
 model = keras.models.load_model("best_model.keras")
 
-# Hardcoded classes so the cloud server doesn't need the massive dataset folder
-idx_to_fruit = {
-    '0': 'apple', '1': 'apples', '2': 'banana', '3': 'bellpepper', 
-    '4': 'carrot', '5': 'cucumber', '6': 'grape', '7': 'guava', 
-    '8': 'jujube', '9': 'mango', '10': 'orange', '11': 'oranges', 
-    '12': 'pomegranate', '13': 'potato', '14': 'strawberry', '15': 'tomato'
-}
+import json
+
+# Try to load the dynamic classes, fallback to hardcoded if not pushed to cloud yet
+try:
+    with open("class_names.json", "r") as f:
+        idx_to_fruit = json.load(f)
+except Exception:
+    idx_to_fruit = {
+        '0': 'apple', '1': 'apples', '2': 'banana', '3': 'bellpepper', 
+        '4': 'carrot', '5': 'cucumber', '6': 'grape', '7': 'guava', 
+        '8': 'jujube', '9': 'mango', '10': 'orange', '11': 'oranges', 
+        '12': 'pomegranate', '13': 'potato', '14': 'strawberry', '15': 'tomato'
+    }
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):

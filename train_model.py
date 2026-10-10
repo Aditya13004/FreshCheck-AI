@@ -59,11 +59,10 @@ def gather_image_paths(base_dir):
                 cond_lbl = c_idx
                 break
                 
-        for fruit, f_idx in fruit_to_idx.items():
-            if fruit in folder_name:
-                fruit_lbl = f_idx
-                break
-                
+        fruit_name = folder_name.replace('fresh', '').replace('rotten', '')
+        if fruit_name in fruit_to_idx:
+            fruit_lbl = fruit_to_idx[fruit_name]
+        
         if cond_lbl is not None and fruit_lbl is not None:
             for file in files:
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
@@ -147,7 +146,6 @@ def build_model(num_fruits):
     x = layers.RandomFlip("horizontal")(inputs)
     x = layers.RandomRotation(0.15)(x)
     x = layers.RandomZoom(0.1)(x)
-    x = layers.RandomBrightness(0.2)(x)
 
     # Replaced EfficientNetB3 with MobileNetV2 (better for beginner/web app requirements)
     backbone = keras.applications.MobileNetV2(
