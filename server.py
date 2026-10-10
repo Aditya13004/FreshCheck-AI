@@ -60,8 +60,8 @@ async def predict(file: UploadFile = File(...)):
     fruit_confidence = float(fruit_preds[0][fruit_idx]) * 100
     
     # Out-Of-Distribution (OOD) Filter
-    # Neural Networks are inherently overconfident. We set a strict threshold to filter non-produce.
-    if fruit_confidence < 98.5:
+    # Set a more reasonable threshold so actual produce isn't filtered out
+    if fruit_confidence < 50.0:
         fruit_name = "Unknown Object"
         condition = "N/A"
         cond_confidence = 0.0
